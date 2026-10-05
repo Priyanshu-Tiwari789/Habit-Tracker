@@ -2,6 +2,8 @@
 
 > A Notion-inspired personal habit tracker, timetable planner, and consistency dashboard built with pure HTML5, CSS3, and Vanilla JavaScript.
 
+🌐 **Live Demo:** [https://habit-tracker-six-teal.vercel.app](https://habit-tracker-six-teal.vercel.app)
+
 ![HabitFlow Preview](https://raw.githubusercontent.com/placeholder/preview.png)
 
 ---
