@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Personal Habit Tracker — plan your day, build good habits, quit bad ones, and track your progress.">
+  <title>HabitFlow — Your Personal Productivity Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- SVG favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><defs><linearGradient id='lg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%233b82f6'/><stop offset='100%25' stop-color='%238b5cf6'/></linearGradient></defs><rect width='36' height='36' rx='10' fill='url(%23lg)'/><circle cx='18' cy='18' r='13' stroke='white' stroke-width='1.2' stroke-opacity='0.35' stroke-dasharray='2 3' fill='none'/><path d='M10 18.5l5.5 5.5 10.5-11' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round' fill='none'/><circle cx='27' cy='9' r='2' fill='%23fbbf24'/></svg>">
+</head>
+<body>
+  <!-- Skip to main content for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ═══════════════ SIDEBAR ═══════════════ -->
+  <nav class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="sidebar-header">
+      <!-- HabitFlow Modern Vector Logo -->
+      <div class="logo-container" aria-hidden="true">
+        <svg class="sidebar-logo-svg" width="34" height="34" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="hf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#3b82f6"/>
+              <stop offset="50%" stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#8b5cf6"/>
+            </linearGradient>
+            <filter id="hf-glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#6366f1" flood-opacity="0.35"/>
+            </filter>
+          </defs>
+          <rect width="36" height="36" rx="10" fill="url(#hf-grad)" filter="url(#hf-glow)"/>
+          <circle cx="18" cy="18" r="13" stroke="white" stroke-width="1.2" stroke-opacity="0.3" stroke-dasharray="2 3"/>
+          <path d="M10 18.5 L15.5 24 L26 12.5" stroke="white" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="27" cy="9.5" r="2.2" fill="#fbbf24"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="sidebar-title">HabitFlow</span>
+        <span class="sidebar-subtitle">Daily Planner</span>
+      </div>
+      <button class="sidebar-close" id="sidebar-close" aria-label="Close navigation">&times;</button>
+    </div>
+
+    <!-- User Chip -->
+    <div class="sidebar-user-chip" id="sidebar-user-chip" title="Click to edit your nickname">
+      <span class="user-avatar" id="user-avatar" aria-hidden="true">🎯</span>
+      <div class="user-chip-info">
+        <span class="user-name-chip" id="user-name-chip">Set your nickname</span>
+        <span class="user-status-text">Click to edit</span>
+      </div>
+    </div>
+
+    <ul class="sidebar-nav" role="list">
+      <li><button class="nav-btn active" data-page="dashboard"><span class="nav-icon" aria-hidden="true">🏠</span> Dashboard</button></li>
+      <li><button class="nav-btn" data-page="timetable"><span class="nav-icon" aria-hidden="true">🕐</span> Timetable</button></li>
+      <li><button class="nav-btn" data-page="habits"><span class="nav-icon" aria-hidden="true">✅</span> Habits</button></li>
+      <li><button class="nav-btn" data-page="quit-habits"><span class="nav-icon" aria-hidden="true">🚫</span> Quit Habits</button></li>
+      <li><button class="nav-btn" data-page="checkpoints"><span class="nav-icon" aria-hidden="true">🎯</span> Checkpoints</button></li>
+      <li><button class="nav-btn" data-page="hobbies"><span class="nav-icon" aria-hidden="true">🎨</span> Hobbies</button></li>
+      <li><button class="nav-btn" data-page="notes"><span class="nav-icon" aria-hidden="true">📝</span> Notes</button></li>
+      <li><button class="nav-btn" data-page="progress"><span class="nav-icon" aria-hidden="true">📊</span> Progress</button></li>
+      <li><button class="nav-btn" data-page="history"><span class="nav-icon" aria-hidden="true">📅</span> History</button></li>
+      <li><button class="nav-btn" data-page="settings"><span class="nav-icon" aria-hidden="true">⚙️</span> Settings</button></li>
+    </ul>
+  </nav>
+
+  <!-- Mobile top bar -->
+  <header class="mobile-header" id="mobile-header">
+    <button class="hamburger" id="hamburger" aria-label="Open navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="mobile-brand">
+      <svg width="24" height="24" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+        <rect width="36" height="36" rx="8" fill="#3b82f6"/>
+        <path d="M10 18.5 L15.5 24 L26 12.5" stroke="white" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="mobile-title">HabitFlow</span>
+    </div>
+    <button class="mobile-search-btn" id="mobile-search-btn" aria-label="Search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    </button>
+  </header>
+
+  <!-- Overlay for mobile sidebar -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+  <main class="main" id="main-content">
+
+    <!-- Global search bar -->
+    <div class="global-search" id="global-search">
+      <label for="search-input" class="visually-hidden">Search habits, notes, hobbies, and activities</label>
+      <div class="search-wrapper">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="search" id="search-input" placeholder="Search habits, notes, hobbies…" autocomplete="off">
+        <kbd class="search-kbd" aria-hidden="true">Ctrl+K</kbd>
+      </div>
+      <div class="search-results" id="search-results" role="listbox" aria-label="Search results"></div>
+    </div>
+
+    <!-- ═══════════════ PAGE: DASHBOARD ═══════════════ -->
+    <section class="page active" id="page-dashboard" aria-label="Dashboard">
+      <div class="dashboard-greeting" id="dashboard-greeting">
+        <div class="greeting-row">
+          <h1 id="greeting-text">Good evening</h1>
+          <button class="btn-edit-nickname" id="btn-edit-nickname" title="Edit nickname / name" aria-label="Edit nickname">
+            <span aria-hidden="true">✏️</span>
+          </button>
+        </div>
+        <p class="greeting-date" id="greeting-date"></p>
+        <p class="greeting-time" id="greeting-time"></p>
+      </div>
+
+      <div class="dashboard-score-card" id="dashboard-score-card">
+        <div class="score-circle" id="score-circle">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="52" class="score-bg"/>
+            <circle cx="60" cy="60" r="52" class="score-fill" id="score-fill"/>
+          </svg>
+          <span class="score-value" id="score-value">0%</span>
+        </div>
+        <div class="score-details">
+          <h2>Today's Score</h2>
+          <p class="score-message" id="score-message">Start your day strong.</p>
+          <div class="score-stats" id="score-stats">
+            <div class="stat"><span class="stat-num" id="stat-streak">0</span><span class="stat-label">Day Streak</span></div>
+            <div class="stat"><span class="stat-num" id="stat-habits-done">0</span><span class="stat-label">Habits Done</span></div>
+            <div class="stat"><span class="stat-num" id="stat-tasks-done">0</span><span class="stat-label">Tasks Done</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7-Day Flow Strip: Bright for good days, Dull for missed -->
+      <div class="dash-week-flow" id="dash-week-flow">
+        <div class="dash-week-flow-header">
+          <span class="dash-week-title">📅 This Week's Habit Flow</span>
+          <span class="dash-week-legend-hint">🌟 Bright = Completed · ⚪ Dull = Missed</span>
+        </div>
+        <div class="dash-week-days" id="dash-week-days">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Quick view cards rendered by JS -->
+        <div class="dash-card" id="dash-timetable">
+          <h3>Today's Schedule</h3>
+          <div class="dash-card-body" id="dash-timetable-body"></div>
+          <button class="dash-card-link" data-page="timetable">View Full Timetable →</button>
+        </div>
+        <div class="dash-card" id="dash-habits">
+          <h3>Habits</h3>
+          <div class="dash-card-body" id="dash-habits-body"></div>
+          <button class="dash-card-link" data-page="habits">View All Habits →</button>
+        </div>
+        <div class="dash-card" id="dash-checkpoints">
+          <h3>Checkpoints</h3>
+          <div class="dash-card-body" id="dash-checkpoints-body"></div>
+          <button class="dash-card-link" data-page="checkpoints">View Checkpoints →</button>
+        </div>
+        <div class="dash-card" id="dash-hobbies">
+          <h3>Hobbies</h3>
+          <div class="dash-card-body" id="dash-hobbies-body"></div>
+          <button class="dash-card-link" data-page="hobbies">View Hobbies →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ PAGE: TIMETABLE ═══════════════ -->
+    <section class="page" id="page-timetable" aria-label="Timetable">
+      <div class="page-header">
+        <h1>Daily Timetable</h1>
+        <button class="btn btn-primary" id="add-schedule-btn">+ Add Time Slot</button>
+      </div>
+      <div class="timetable-timeline" id="timetable-timeline"></div>
+      <div class="timetable-table-wrapper">
+        <table class="timetable-table" id="timetable-table" aria-label="Today's schedule">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Activity</th>
+              <th>Category</th>
+              <th>Notes</th>
+              <th>Done</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="timetable-tbody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="timetable-empty" style="display:none;">
+        <p class="empty-icon" aria-hidden="true">🕐</p>
+        <p class="empty-title">No schedule yet</p>
+        <p class="empty-text">Plan your day by adding time slots. Start with your morning routine.</p>
+        <button class="btn btn-primary" id="add-schedule-btn-empty">+ Add Time Slot</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════ PAGE: HABITS ═══════════════ -->
+    <section class="page" id="page-habits" aria-label="Habits to Build">
+      <div class="page-header">
+        <h1>Habits to Build</h1>
+        <button class="btn btn-primary" id="add-habit-btn">+ Add Habit</button>
+      </div>
+      <div class="habits-grid" id="habits-grid"></div>
+      <div class="empty-state" id="habits-empty" style="display:none;">
+        <p class="empty-icon" aria-hidden="true">✅</p>
+        <p class="empty-title">No habits yet</p>
+        <p class="empty-text">Start with one small habit. Consistency beats intensity every time.</p>
+        <button class="btn btn-primary" id="add-habit-btn-empty">+ Add Habit</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════ PAGE: QUIT HABITS ═══════════════ -->
+    <section class="page" id="page-quit-habits" aria-label="Habits to Quit">
+      <div class="page-header">
+        <h1>Habits to Quit</h1>
+        <button class="btn btn-danger" id="add-quit-btn">+ Track a Habit to Quit</button>
+      </div>
+      <div class="habits-grid" id="quit-habits-grid"></div>
+      <div class="empty-state" id="quit-habits-empty" style="display:none;">
+        <p class="empty-icon" aria-hidden="true">🚫</p>
+        <p class="empty-title">Nothing to quit yet</p>
+        <p class="empty-text">If there's a habit you'd like to leave behind, track it here. No judgment — just progress.</p>
+        <button class="btn btn-danger" id="add-quit-btn-empty">+ Track a Habit to Quit</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════ PAGE: CHECKPOINTS ═══════════════ -->
+    <section class="page" id="page-checkpoints" aria-label="Daily Checkpoints">
+      <div class="page-header">
+        <h1>Daily Checkpoints</h1>
+        <button class="btn btn-primary" id="add-checkpoint-btn">+ Add Checkpoint</button>
+      </div>
+      <div class="checkpoint-progress" id="checkpoint-progress">
+        <span id="checkpoint-count">0/0</span>
+        <div class="progress-bar"><div class="progress-fill" id="checkpoint-progress-fill"></div></div>
+      </div>
+      <div class="checkpoints-container" id="checkpoints-container"></div>
+      <div class="empty-state" id="checkpoints-empty" style="display:none;">
+        <p class="empty-icon" aria-hidden="true">🎯</p>
+        <p class="empty-title">No checkpoints yet</p>
+        <p class="empty-text">Divide your day into checkpoints to stay on track. Try adding Morning, Afternoon, Evening, and Night sections.</p>
+        <button class="btn btn-primary" id="add-checkpoint-btn-empty">+ Add Checkpoint</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════ PAGE: HOBBIES ═══════════════ -->
+    <section class="page" id="page-hobbies" aria-label="Hobbies">
+      <div class="page-header">
+        <h1>Start Something New</h1>
+        <button class="btn btn-purple" id="add-hobby-btn">+ New Hobby</button>
+      </div>
+      <div class="hobbies-grid" id="hobbies-grid"></div>
+      <div class="empty-state" id="hobbies-empty" style="display:none;">
+        <p class="empty-icon" aria-hidden="true">🎨</p>
+        <p class="empty-title">No hobbies yet</p>
+        <p class="empty-text">Pick something you've always wanted to try. Write a commitment and track your progress.</p>
+        <button class="btn btn-purple" id="add-hobby-btn-empty">+ New Hobby</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════ PAGE: NOTES ═══════════════ -->
+    <section class="page" id="page-notes" aria-label="Notes">
+      <div class="page-header">
+        <h1>Notes</h1>
+        <button class="btn btn-primary" id="add-note-btn">+ New Note</button>
+      </div>
+      <div class="notes-filter" id="notes-filter">
+        <label for="notes-search" class="visually-hidden">Search notes</label>
+        <input type="search" id="notes-search" placeholder="Search notes…">
+        <select id="notes-category-filter" aria-label="Filter notes by category">
+          <option value="all">All Notes</option>
+          <option value="daily">Daily</option>
+          <option value="habit">Habit</option>
+          <option value="hobby">Hobby</option>
+          <option value="general">General</option>
+        </select>
+      </div>
+      <div class="notes-grid" id="notes-grid"></div>
+      <div class="empty-state" id="notes-empty" style="display:none;">
+        <p class="empty-icon" aria-hidden="true">📝</p>
+        <p class="empty-title">No notes yet</p>
+        <p class="empty-text">Capture your thoughts, reflections, or plans here.</p>
+        <button class="btn btn-primary" id="add-note-btn-empty">+ New Note</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════ PAGE: PROGRESS ═══════════════ -->
+    <section class="page" id="page-progress" aria-label="Progress and Analytics">
+      <div class="page-header">
+        <h1>Progress & Analytics</h1>
+      </div>
+      <div class="analytics-summary" id="analytics-summary">
+        <div class="analytics-card">
+          <span class="analytics-num" id="analytics-week-completed">0</span>
+          <span class="analytics-label">Habits Completed This Week</span>
+        </div>
+        <div class="analytics-card">
+          <span class="analytics-num" id="analytics-week-missed">0</span>
+          <span class="analytics-label">Habits Missed This Week</span>
+        </div>
+        <div class="analytics-card">
+          <span class="analytics-num" id="analytics-best-streak">0</span>
+          <span class="analytics-label">Best Streak (days)</span>
+        </div>
+        <div class="analytics-card">
+          <span class="analytics-num" id="analytics-avg-score">0%</span>
+          <span class="analytics-label">Avg Daily Score</span>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Weekly Completion</h3>
+          <canvas id="chart-weekly" width="500" height="250" aria-label="Weekly completion chart" role="img"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Habit Consistency</h3>
+          <canvas id="chart-consistency" width="500" height="250" aria-label="Habit consistency chart" role="img"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ PAGE: HISTORY ═══════════════ -->
+    <section class="page" id="page-history" aria-label="History">
+      <div class="page-header">
+        <h1>Calendar & History</h1>
+      </div>
+      <div class="history-layout">
+        <div class="calendar-wrapper" id="calendar-wrapper">
+          <div class="calendar-nav">
+            <button class="btn btn-icon" id="cal-prev" aria-label="Previous month">‹</button>
+            <span class="calendar-month" id="calendar-month"></span>
+            <button class="btn btn-icon" id="cal-next" aria-label="Next month">›</button>
+          </div>
+          <div class="calendar-grid" id="calendar-grid"></div>
+          <!-- Bright vs Dull Calendar Legend -->
+          <div class="cal-legend" aria-hidden="true">
+            <span class="legend-badge legend-great"><span class="legend-dot-vibrant"></span> Day Went Great (85-100% Bright)</span>
+            <span class="legend-badge legend-good"><span class="legend-dot-good"></span> Good Day (65-84% Bright)</span>
+            <span class="legend-badge legend-partial"><span class="legend-dot-partial"></span> Partial (35-64%)</span>
+            <span class="legend-badge legend-dull"><span class="legend-dot-dull"></span> Tasks Not Done (Dull)</span>
+          </div>
+        </div>
+        <div class="history-detail" id="history-detail">
+          <h3 id="history-date-title">Select a date</h3>
+          <div id="history-content" class="history-content">
+            <p class="empty-text">Click a date on the calendar to see that day's data.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ PAGE: SETTINGS ═══════════════ -->
+    <section class="page" id="page-settings" aria-label="Settings">
+      <div class="page-header">
+        <h1>Settings & Personalization</h1>
+      </div>
+
+      <div class="settings-group">
+        <h3>Personal Profile</h3>
+        <div class="setting-row">
+          <label for="username-input">Nickname / Display Name</label>
+          <input type="text" id="username-input" placeholder="e.g. Alex, Priyanshu, Sam" maxlength="30">
+        </div>
+        <div class="setting-row avatar-setting-row">
+          <label>Avatar Icon</label>
+          <div class="avatar-picker-grid" id="settings-avatar-picker">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+        <div class="profile-preview-card">
+          <span class="profile-preview-label">Live Preview:</span>
+          <span class="profile-preview-bubble" id="profile-preview-text">Good evening, Alex! 🎯</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3>Appearance</h3>
+        <div class="setting-row">
+          <label for="theme-select">Theme</label>
+          <select id="theme-select">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <label for="accent-select">Accent Color</label>
+          <select id="accent-select">
+            <option value="blue">Blue</option>
+            <option value="green">Green</option>
+            <option value="purple">Purple</option>
+            <option value="orange">Orange</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3>Data Management</h3>
+        <div class="setting-row">
+          <div>
+            <strong>Clear Pre-existing Sample Data</strong>
+            <p class="setting-desc">Purge all default template habits and tasks so only your real personal data is tracked.</p>
+          </div>
+          <button class="btn btn-warning" id="clear-sample-btn">Purge Sample Data</button>
+        </div>
+        <div class="setting-row">
+          <span>Export all data as JSON</span>
+          <button class="btn btn-primary" id="export-btn">Export</button>
+        </div>
+        <div class="setting-row">
+          <span>Import data from JSON file</span>
+          <button class="btn btn-primary" id="import-btn">Import</button>
+          <input type="file" id="import-file" accept=".json" class="visually-hidden">
+        </div>
+        <div class="setting-row">
+          <span>Reset today's progress</span>
+          <button class="btn btn-secondary" id="reset-today-btn">Reset Today</button>
+        </div>
+        <div class="setting-row">
+          <div>
+            <strong style="color:var(--red);">Clear All Data Permanently</strong>
+            <p class="setting-desc">Erase everything and start with a completely blank notebook.</p>
+          </div>
+          <button class="btn btn-danger" id="clear-all-btn">Clear All Data</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════ MODALS ═══════════════ -->
+
+  <!-- Generic Modal Container -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h2 id="modal-title"></h2>
+        <button class="modal-close" id="modal-close" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
+    </div>
+  </div>
+
+  <!-- Quick Nickname Edit Modal -->
+  <div class="modal-overlay" id="nickname-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Personalize Nickname">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2>Personalize Your Nickname</h2>
+        <button class="modal-close" id="nickname-modal-close" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="quick-nickname-input" style="font-weight:600;font-size:13px;">What should HabitFlow call you?</label>
+          <input type="text" id="quick-nickname-input" placeholder="e.g. Alex, Sam, Priyanshu..." maxlength="30" style="font-size:15px;padding:10px 12px;">
+        </div>
+        <div class="form-group">
+          <label style="font-weight:600;font-size:13px;margin-bottom:8px;display:block;">Choose your Avatar Emoji</label>
+          <div class="avatar-picker-grid" id="quick-avatar-picker"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="nickname-modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="nickname-modal-save">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm dialog -->
+  <div class="modal-overlay" id="confirm-overlay" aria-hidden="true">
+    <div class="modal modal-sm">
+      <div class="modal-header"><h2 id="confirm-title">Confirm</h2></div>
+      <div class="modal-body"><p id="confirm-message"></p></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="confirm-cancel">Cancel</button>
+        <button class="btn btn-danger" id="confirm-ok">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ MASCOT BUDDY (INTERACTIVE COMPANION) ═══════════════ -->
+  <div class="mascot-wrapper" id="mascot-wrapper" aria-label="Interactive Habit Mascot Buddy">
+    <button class="mascot-toggle-btn" id="mascot-toggle-btn" title="Minimize / Show Buddy" aria-label="Toggle mascot">✕</button>
+    <div class="mascot-bubble" id="mascot-bubble" role="status">Let's go! 💪</div>
+    
+    <div class="mascot-avatar-container" id="mascot-avatar-container" title="Click me for a boost!">
+      <svg class="mascot-svg" id="mascot-svg" viewBox="0 0 90 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="mascot-body-grad" cx="40%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#fde047"/>
+            <stop offset="70%" stop-color="#eab308"/>
+            <stop offset="100%" stop-color="#ca8a04"/>
+          </radialGradient>
+          <filter id="mascot-glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#ca8a04" flood-opacity="0.3"/>
+          </filter>
+        </defs>
+
+        <!-- Antenna / Sprout -->
+        <path class="mascot-sprout" d="M45 22 Q45 10 52 8 Q58 6 56 12 Q54 18 45 22" fill="#22c55e" stroke="#15803d" stroke-width="1.2"/>
+        <circle cx="54" cy="9" r="2.5" fill="#4ade80"/>
+
+        <!-- Body & Shadow -->
+        <ellipse cx="45" cy="78" rx="22" ry="24" fill="url(#mascot-body-grad)" filter="url(#mascot-glow)"/>
+        
+        <!-- Head -->
+        <circle cx="45" cy="40" r="24" fill="url(#mascot-body-grad)"/>
+
+        <!-- Cute big eyes with blinking animation -->
+        <g class="mascot-eyes" id="mascot-eyes">
+          <ellipse class="mascot-eye eye-left" cx="36" cy="38" rx="4.5" ry="6" fill="#18181b"/>
+          <ellipse class="mascot-eye eye-right" cx="54" cy="38" rx="4.5" ry="6" fill="#18181b"/>
+          <!-- Eye highlights -->
+          <circle cx="38" cy="36" r="2" fill="white"/>
+          <circle cx="34.5" cy="40.5" r="1" fill="white"/>
+          <circle cx="56" cy="36" r="2" fill="white"/>
+          <circle cx="52.5" cy="40.5" r="1" fill="white"/>
+        </g>
+
+        <!-- Cheeks -->
+        <ellipse cx="29" cy="45" rx="5" ry="3" fill="#f43f5e" opacity="0.6"/>
+        <ellipse cx="61" cy="45" rx="5" ry="3" fill="#f43f5e" opacity="0.6"/>
+
+        <!-- Smile mouth -->
+        <path class="mascot-mouth" id="mascot-mouth" d="M38 48 Q45 55 52 48" stroke="#18181b" stroke-width="2.5" stroke-linecap="round" fill="#e11d48"/>
+
+        <!-- Left arm -->
+        <path class="mascot-arm mascot-arm-left" id="mascot-arm-left" d="M25 72 Q10 60 14 46" stroke="#eab308" stroke-width="9" stroke-linecap="round" fill="none"/>
+        
+        <!-- Right arm -->
+        <path class="mascot-arm mascot-arm-right" id="mascot-arm-right" d="M65 72 Q80 60 76 46" stroke="#eab308" stroke-width="9" stroke-linecap="round" fill="none"/>
+
+        <!-- Little feet -->
+        <ellipse cx="34" cy="98" rx="7" ry="5" fill="#ca8a04"/>
+        <ellipse cx="56" cy="98" rx="7" ry="5" fill="#ca8a04"/>
+
+        <!-- Chest heart / badge -->
+        <circle cx="45" cy="74" r="5" fill="#ef4444" opacity="0.85"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ═══════════════ ONBOARDING MODAL ═══════════════ -->
+  <div class="modal-overlay" id="onboarding-overlay" role="dialog" aria-modal="true" aria-label="Welcome to HabitFlow" aria-hidden="true">
+    <div class="modal onboarding-modal">
+      <div class="onboarding-hero">
+        <svg class="onboarding-logo" width="60" height="60" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <rect width="36" height="36" rx="10" fill="url(#hf-grad)"/>
+          <path d="M10 18.5 L15.5 24 L26 12.5" stroke="white" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h2>Welcome to HabitFlow</h2>
+        <p>Your personalized habit tracker & daily productivity notebook. Let's make it feel like home!</p>
+      </div>
+
+      <div class="form-group" style="margin-bottom:16px;">
+        <label for="onboarding-name" style="font-weight:600;font-size:14px;">What's your nickname?</label>
+        <input type="text" id="onboarding-name" placeholder="e.g. Alex, Sam, Priyanshu…" maxlength="30"
+          style="font-size:16px;padding:12px 14px;" autocomplete="given-name">
+        <p style="font-size:12px;color:var(--text-tertiary);margin-top:6px;">Your data is saved 100% locally on your device.</p>
+      </div>
+
+      <div class="form-group" style="margin-bottom:22px;">
+        <label style="font-weight:600;font-size:13px;display:block;margin-bottom:8px;">Choose your starting avatar</label>
+        <div class="avatar-picker-grid" id="onboarding-avatar-picker"></div>
+      </div>
+
+      <button class="btn btn-primary" id="onboarding-submit" style="width:100%;padding:14px;font-size:16px;font-weight:700;">
+        Start Fresh & Build Habits 🚀
+      </button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
